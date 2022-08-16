@@ -1,8 +1,8 @@
 import torch
 from torch import nn
-from models.lenet import LeNet
+from models.alexnet import AlexNet
 from torchvision.datasets import FashionMNIST
-from torchvision.transforms import ToTensor
+from torchvision.transforms import ToTensor, Resize, Compose
 from torch.utils.data import DataLoader
 from torch.optim import SGD
 from torch.nn import CrossEntropyLoss
@@ -30,26 +30,27 @@ def caculate_accuracy(preds: torch.Tensor,
 
 
 if __name__=='__main__':
-    config = {'epochs': 10, 'lr': 0.9,
-              'model': 'LeNet',
-              'batch_size': 64}
+    config = {'epochs': 10, 'lr': 0.1,
+              'model': 'AlexNet',
+              'batch_size': 32}
     wandb.init(project='fashionMNIST-train',
-               name=f'LeNet-train',
+               name=f'AlexNet-train',
                config=config)
     # 数据
+    transforms = Compose([ToTensor(), Resize(size=(224, 224))])
     train_set = FashionMNIST('./datasets/fashionMNIST',
                             train=True, download=True,
-                            transform=ToTensor())
+                            transform=transforms)
     test_set = FashionMNIST('./datasets/fashionMNIST',
                             train=False, download=True,
-                            transform=ToTensor())
+                            transform=transforms)
     train_loader = DataLoader(dataset=train_set, batch_size=config['batch_size'],
                               shuffle=True)
     test_loader = DataLoader(dataset=test_set, batch_size=config['batch_size'],
                               shuffle=False)
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # 模型
-    model = LeNet()
+    model = AlexNet()
     model.apply(init_weight)
     model = model.to(device)
     # 优化器+损失函数
@@ -113,7 +114,3 @@ if __name__=='__main__':
                 'train/accuracy': train_accuracy,
                 'train/time_per_epoch': end - start,
             })
-
-
-
-
