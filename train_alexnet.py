@@ -10,23 +10,7 @@ from tqdm import tqdm, trange
 import pdb
 import wandb
 import time
-
-
-def init_weight(m):
-    if isinstance(m, nn.Linear) or isinstance(m, nn.Conv2d):
-        nn.init.xavier_uniform_(m.weight)
-
-
-def caculate_accuracy(preds: torch.Tensor,
-        targets: torch.Tensor,
-        total_correct: int,
-        total_samples: int):
-    correct_nums = (preds.argmax(dim=-1) == targets).sum()
-    total_correct += correct_nums.item()
-    total_samples += len(preds)
-    accuracy = total_correct / total_samples
-
-    return accuracy, total_correct, total_samples
+from utils import init_weight, caculate_accuracy
 
 
 if __name__=='__main__':
