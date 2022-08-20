@@ -3,6 +3,7 @@ from lib2to3.pgen2.driver import Driver
 from turtle import forward
 import torch 
 from torch import nn
+from torchstat import stat
 
 
 class AlexNet(nn.Module):
@@ -41,6 +42,7 @@ class AlexNet(nn.Module):
 if __name__ == '__main__':
     x = torch.randn(1, 1, 224, 224)
     model = AlexNet()
-    for layer in model.net:
-        x = layer(x)
-        print(f'{layer} ouput_shape:{x.shape}')
+    # for layer in model.net:
+    #     x = layer(x)
+    #     print(f'{layer} ouput_shape:{x.shape}')
+    stat(model, (1, 224, 224))

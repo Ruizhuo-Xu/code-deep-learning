@@ -1,6 +1,9 @@
+from operator import mod
+from statistics import mode
 import torch
 from torch import nn
 from models.batchnorm import BatchNorm
+from torchstat import stat
 
 
 class LeNet(nn.Module):
@@ -57,7 +60,8 @@ class LeNetModify(nn.Module):
 
 if __name__ == '__main__':
     x = torch.randn(1, 1, 28, 28)
-    model = LeNetModify()
-    for layer in model.net:
-        x = layer(x)
-        print(f'{layer} ouput_shape:{x.shape}')
+    model = LeNet()
+    # for layer in model.net:
+    #     x = layer(x)
+    #     print(f'{layer} ouput_shape:{x.shape}')
+    stat(model, (1, 28, 28))

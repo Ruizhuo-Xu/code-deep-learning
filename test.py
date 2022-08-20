@@ -1,4 +1,5 @@
-from models.lenet import LeNet
+import torch
+from torchvision.models import resnet18
 
-a = (i for i in range(3))
-print(a)
+model = resnet18()
+print(model)
